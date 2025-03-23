@@ -1,5 +1,6 @@
 export interface TaxResults {
   grossSalary: number
+  basicPay:number
   standardDeduction: number
   taxableIncome: number
   incomeTax: number
@@ -9,30 +10,48 @@ export interface TaxResults {
   employeePF: number
   employerPF: number
   gratuityAmount: number
+  professionalTax: number
+  totalDeductions: number
   inHandSalary: number
   inHandSalaryPerMonth: number
 }
 
-export function calculateTax(grossSalary: number, basicPayPercentage: number, employerPfIncluded = false, considerGratuity = false): TaxResults {
+export function calculateTax(
+    grossSalary: number,
+    basicPayPercentage: number,
+    employerPfIncluded = false,
+    considerGratuity = false
+): TaxResults {
   // Constants
   const STANDARD_DEDUCTION = 75000
   const PF_RATE = 0.12
   const CESS_RATE = 0.04
   const GRATUITY_RATE = 0.0481
 
-  // Basic Pay should be atleast 50% of gross salary
-  const actualBasicPayPercentage = Math.max(50, basicPayPercentage);
-  const basicPay = grossSalary * (actualBasicPayPercentage / 100);
+  // Ensure Basic Pay is at least 50% of gross salary
+  const actualBasicPayPercentage = Math.max(50, basicPayPercentage)
+  const basicPay = grossSalary * (actualBasicPayPercentage / 100)
 
-
-  // Calculate PF deduction
+  // Calculate PF deductions
   const employeePF = basicPay * PF_RATE
-
-  // Calculate employer PF (same as employee PF)
   const employerPF = basicPay * PF_RATE
 
-  // Calculate taxable income
-  const taxableIncome = Math.max(0, grossSalary - STANDARD_DEDUCTION)
+  // Calculate gratuity amount if applicable
+  const gratuityAmount = considerGratuity ? basicPay * GRATUITY_RATE : 0
+
+  const totalPFDeduction =employerPfIncluded ? employeePF + employerPF : employeePF
+
+  // Calculate net salary (post-tax)
+  const netSalary = grossSalary - gratuityAmount - totalPFDeduction
+
+  // Calculate taxable income:
+  // Subtract the employeePF from gross salary.
+  // Additionally, if gratuity is considered, subtract the gratuity amount as well.
+  const taxableIncome = Math.max(
+      0,
+      grossSalary -
+      STANDARD_DEDUCTION
+  )
 
   // Calculate income tax using the slabs
   const incomeTax =
@@ -46,23 +65,22 @@ export function calculateTax(grossSalary: number, basicPayPercentage: number, em
   // Calculate cess
   const cess = incomeTax * CESS_RATE
 
+  const professionalTax = 12*200
+
   // Calculate total tax
-  const totalTax = incomeTax + cess
+  const totalTax = incomeTax + cess + professionalTax
 
-  // Calculate gratuity amount
-  const gratuityAmount = considerGratuity ? basicPay * GRATUITY_RATE : 0;
-
-  // Calculate net salary (post-tax)
-  const netSalary = grossSalary - totalTax - gratuityAmount
+  const totalDeductions = gratuityAmount + totalPFDeduction
 
   // Calculate in-hand salary (post-tax and PF)
-  // If employer PF is included in CTC, deduct both employee and employer PF
-  const inHandSalary = employerPfIncluded ? netSalary - employeePF * 2 : netSalary - employeePF
+  // If employer PF is included, deduct both employee and employer PF
+  const inHandSalary = netSalary - totalTax
 
   const inHandSalaryPerMonth = inHandSalary / 12
 
   return {
     grossSalary,
+    basicPay,
     standardDeduction: STANDARD_DEDUCTION,
     taxableIncome,
     incomeTax,
@@ -72,6 +90,8 @@ export function calculateTax(grossSalary: number, basicPayPercentage: number, em
     employeePF,
     employerPF,
     gratuityAmount,
+    professionalTax,
+    totalDeductions,
     inHandSalary,
     inHandSalaryPerMonth,
   }

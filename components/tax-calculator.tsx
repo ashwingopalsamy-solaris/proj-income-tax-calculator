@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,21 +16,9 @@ import TaxReportDownload from "@/components/tax-report-download"
 import { calculateTax } from "@/lib/tax-calculations"
 import { formatCurrency, formatLPA } from "@/lib/formatters"
 import { motion, AnimatePresence } from "framer-motion"
-import {
-  LineChart,
-  IndianRupee,
-  Calculator,
-  Info,
-  TrendingUp,
-  Percent,
-  Briefcase,
-  Award,
-  HelpCircle,
-  ArrowRight,
-} from "lucide-react"
+import { LineChart, IndianRupee, Calculator, Info, TrendingUp, Percent, Briefcase, Award } from "lucide-react"
 import HikeImpactTable from "@/components/hike-impact-table"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Button } from "@/components/ui/button"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 export default function TaxCalculator() {
   const [salary, setSalary] = useState<string>("")
@@ -85,7 +74,7 @@ export default function TaxCalculator() {
   return (
       <TooltipProvider>
         <motion.div
-            className="max-w-5xl mx-auto space-y-6 px-4 py-6"
+            className="max-w-6xl mx-auto space-y-6 px-4 py-6"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -115,12 +104,10 @@ export default function TaxCalculator() {
                               animate={{ opacity: 1 }}
                               className="flex items-center gap-2 text-sm font-medium"
                           >
-                <span className="px-3 py-1 bg-primary/10 rounded-full text-primary">
-                  {formatCurrency(salaryValue)}
-                </span>
-                            <span className="text-muted-foreground">
-                  ({formatLPA(salaryValue)})
-                </span>
+                        <span className="px-3 py-1 bg-primary/10 rounded-full text-primary">
+                          {formatCurrency(salaryValue)}
+                        </span>
+                            <span className="text-muted-foreground">({formatLPA(salaryValue)})</span>
                           </motion.div>
                       )}
                     </div>
@@ -161,18 +148,18 @@ export default function TaxCalculator() {
                       </h3>
 
                       <div className="space-y-4">
-                        <div
-                            className="flex items-center justify-between p-4 rounded-lg border border-border/40 bg-background/50 hover:bg-background/80 transition-colors">
+                        <div className="flex items-center justify-between p-4 rounded-lg border border-border/40 bg-background/50 hover:bg-background/80 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div
-                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                              <Briefcase className="h-5 w-5 text-primary"/>
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                              <Briefcase className="h-5 w-5 text-primary" />
                             </div>
                             <div>
                               <Label htmlFor="employer-pf" className="cursor-pointer font-medium">
                                 Employer PF
                               </Label>
-                              <p className="text-xs text-muted-foreground mt-0.5">Include Employer's PF contribution in CTC</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                Include Employer's PF contribution in CTC
+                              </p>
                             </div>
                           </div>
                           <Switch
@@ -183,12 +170,10 @@ export default function TaxCalculator() {
                           />
                         </div>
 
-                        <div
-                            className="flex items-center justify-between p-4 rounded-lg border border-border/40 bg-background/50 hover:bg-background/80 transition-colors">
+                        <div className="flex items-center justify-between p-4 rounded-lg border border-border/40 bg-background/50 hover:bg-background/80 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div
-                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                              <Award className="h-5 w-5 text-primary"/>
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                              <Award className="h-5 w-5 text-primary" />
                             </div>
                             <div>
                               <Label htmlFor="gratuity" className="cursor-pointer font-medium">
@@ -261,10 +246,10 @@ export default function TaxCalculator() {
           <AnimatePresence>
             {salaryValue > 0 && (
                 <motion.div
-                    initial={{opacity: 0, y: 20}}
-                    animate={{opacity: 1, y: 0}}
-                    exit={{opacity: 0, y: 20}}
-                    transition={{type: "spring", stiffness: 300, damping: 24}}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     className="space-y-6"
                 >
                   <Card className="border border-border/40 shadow-sm overflow-hidden">
@@ -275,28 +260,28 @@ export default function TaxCalculator() {
                               value="results"
                               className="flex items-center gap-2 py-3 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                           >
-                            <Calculator className="h-4 w-4"/>
+                            <Calculator className="h-4 w-4" />
                             <span className="hidden sm:inline">Salary Breakdown</span>
                           </TabsTrigger>
                           <TabsTrigger
                               value="comparison"
                               className="flex items-center gap-2 py-3 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                           >
-                            <LineChart className="h-4 w-4"/>
+                            <LineChart className="h-4 w-4" />
                             <span className="hidden sm:inline">Compare Salaries</span>
                           </TabsTrigger>
                           <TabsTrigger
                               value="hike"
                               className="flex items-center gap-2 py-3 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                           >
-                            <TrendingUp className="h-4 w-4"/>
+                            <TrendingUp className="h-4 w-4" />
                             <span className="hidden sm:inline">Hike Impact</span>
                           </TabsTrigger>
                           <TabsTrigger
                               value="info"
                               className="flex items-center gap-2 py-3 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                           >
-                            <Info className="h-4 w-4"/>
+                            <Info className="h-4 w-4" />
                             <span className="hidden sm:inline">Tax Slabs</span>
                           </TabsTrigger>
                         </TabsList>
@@ -306,10 +291,10 @@ export default function TaxCalculator() {
                         <AnimatePresence mode="wait">
                           <motion.div
                               key={activeTab}
-                              initial={{opacity: 0, y: 10}}
-                              animate={{opacity: 1, y: 0}}
-                              exit={{opacity: 0, y: -10}}
-                              transition={{duration: 0.2}}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.2 }}
                           >
                             <TabsContent value="results" className="mt-0 data-[state=active]:block">
                               <TaxResultsTable
@@ -320,15 +305,15 @@ export default function TaxCalculator() {
                             </TabsContent>
 
                             <TabsContent value="comparison" className="mt-0 data-[state=active]:block">
-                              <SalaryComparison employerPfIncluded={employerPfIncluded}/>
+                              <SalaryComparison employerPfIncluded={employerPfIncluded} />
                             </TabsContent>
 
                             <TabsContent value="hike" className="mt-0 data-[state=active]:block">
-                              <HikeImpactTable baseSalary={salaryValue} employerPfIncluded={employerPfIncluded}/>
+                              <HikeImpactTable baseSalary={salaryValue} employerPfIncluded={employerPfIncluded} />
                             </TabsContent>
 
                             <TabsContent value="info" className="mt-0 data-[state=active]:block">
-                              <TaxSlabExplainer/>
+                              <TaxSlabExplainer />
                             </TabsContent>
                           </motion.div>
                         </AnimatePresence>
@@ -338,18 +323,21 @@ export default function TaxCalculator() {
 
                   <motion.div
                       className="flex justify-center"
-                      initial={{opacity: 0}}
-                      animate={{opacity: 1}}
-                      transition={{delay: 0.3}}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
                   >
-                    {/* Fixed the button nesting issue by directly rendering the TaxReportDownload component */}
-                    <TaxReportDownload results={taxResults} employerPfIncluded={employerPfIncluded}/>
+                    <TaxReportDownload
+                        results={taxResults}
+                        employerPfIncluded={employerPfIncluded}
+                        gratuityIncluded={considerGratuity}
+                    />
                   </motion.div>
                 </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
       </TooltipProvider>
-)
+  )
 }
 
